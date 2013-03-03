@@ -61,9 +61,18 @@
     NSData *d = [NSData dataWithBytes:data length:length];
     NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
-    // synchronize access to RPMs array
-    @synchronized(RPMs) {
-        [RPMs addObject:s];
+    // process OBD data
+    // RPM
+    if ([[s substringToIndex:4] compare:@"41 0C" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        double rpm;
+        NSString *ret = [[s substringFromIndex:7] stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSScanner *scan = [NSScanner scannerWithString:ret];
+        [scan scanHexDouble:&rpm];
+        rpm = rpm / 4;
+        // synchronize access to RPMs array
+        @synchronized(RPMs) {
+            [RPMs addObject:[NSNumber numberWithFloat:rpm]];
+        }
     }
     //self.label.text = s;
 }
@@ -177,7 +186,7 @@
         // synchronize access to RPMs array
         @synchronized(RPMs) {
             while (size < [RPMs count]) {
-                printf("%s\n", [RPMs[size] UTF8String]);
+                printf("%f\n", [[RPMs objectAtIndex:size] doubleValue]);
                 ++size;
             }
         }
