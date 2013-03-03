@@ -42,9 +42,9 @@
     graph.paddingRight = 20.0;
     graph.paddingBottom = 20.0;
     
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
+    plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(60)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(1500)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(2000)];
     
     CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph.axisSet;
     
@@ -64,7 +64,7 @@
                                                            length:CPTDecimalFromFloat(6100)], nil];
     
     CPTScatterPlot *sp = [[CPTScatterPlot alloc] init];
-    sp.identifier = @"PLOT";
+    sp.identifier = @"RPM";
     sp.dataSource = self;
     sp.delegate = self;
     [graph addPlot:sp toPlotSpace:graph.defaultPlotSpace];
@@ -110,7 +110,7 @@
     NSString *OBDres = [[NSString alloc] initWithData:OBDData encoding:NSUTF8StringEncoding];
     
     // process OBD data
-    // check mode
+    
     // mode $01
     if ([OBDres length] > 2 && [[OBDres substringToIndex:2] isEqualToString:@"41"]) {
         OBDres = [OBDres substringFromIndex:3];
@@ -134,23 +134,35 @@
             
         }
         // Mass Air Flow
-        if ([OBDres length] > 7 && [[OBDres substringToIndex:2] isEqualToString:@"10"]) {
+        else if ([OBDres length] > 7 && [[OBDres substringToIndex:2] isEqualToString:@"10"]) {
             
         }
         // Throttle Position
-        if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"11"]) {
+        else if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"11"]) {
             
         }
         // Fuel Level Input
-        if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"2F"]) {
+        else if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"2F"]) {
             
         }
     }
+    // mode $09
+    else if ([OBDres length] > 2 && [[OBDres substringToIndex:2] isEqualToString:@"49"]) {
+
+    }
+    else
+        printf("%s\n", [OBDres UTF8String]);
 }
 
 - (void) bleDidDisconnect
 {
     [self.buttonConnect setTitle:@"Connect" forState:UIControlStateNormal];
+    
+    // stop log thread if it is running
+    if ([_buttonStart.titleLabel.text isEqualToString:@"Stop"]) {
+        [_buttonStart setTitle:@"Start" forState:UIControlStateNormal];
+        [logRPMthread cancel];
+    }
 }
 
 -(void) bleDidConnect
@@ -231,14 +243,16 @@
 #pragma mark - IBAction
 
 - (IBAction)startLoggingRPM:(id)sender {
-    if ([_buttonStart.titleLabel.text isEqualToString:@"Start"]) {
+    if ([_buttonConnect.titleLabel.text isEqualToString:@"Disconnect"]
+        && [_buttonStart.titleLabel.text isEqualToString:@"Start"]) {
+        
         [_buttonStart setTitle:@"Stop" forState:UIControlStateNormal];
         
         // allocate and start thread
         logRPMthread = [[NSThread alloc] initWithTarget:self selector:@selector(logRPM) object:nil];
         [logRPMthread start];
     }
-    else {
+    else if ([_buttonStart.titleLabel.text isEqualToString:@"Stop"]) {
         [_buttonStart setTitle:@"Start" forState:UIControlStateNormal];
         
         // stop thread
@@ -246,14 +260,17 @@
     }
 }
 
+- (IBAction)refreshGraph:(id)sender {
+    [graph reloadData];
+}
+
 #pragma mark - Threading
 
 - (void)logRPM {
     int size = 0;
-    while ([logRPMthread isCancelled] == NO
-           && [_buttonConnect.titleLabel.text isEqualToString:@"Disconnect"]) {
+    while ([logRPMthread isCancelled] == NO) {
         [self BLESendCommand:@"01 0c"];
-        [NSThread sleepForTimeInterval:0.1];
+        [NSThread sleepForTimeInterval:0.5];
         
         // synchronize access to RPMs array
         @synchronized(RPMs) {
@@ -277,8 +294,23 @@
 
 - (NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum
                 recordIndex:(NSUInteger)index {
-    double val = [[RPMs objectAtIndex:index] doubleValue];
-    return [NSNumber numberWithDouble:val];
+    // for x simply return index value
+    if (fieldEnum == CPTScatterPlotFieldX) {
+        return [NSNumber numberWithUnsignedInteger:index];
+    }
+    // for y return RPM value
+    else {
+        if ([plot.identifier isEqual:@"RPM"]) {
+            double val = 0;
+            @synchronized(RPMs) {
+                if ([RPMs count] > index)
+                    val = [[RPMs objectAtIndex:index] doubleValue];
+            }
+            return [NSNumber numberWithDouble:val];
+        }
+    }
+    
+    return [NSNumber numberWithInt:0];
 }
 
 @end

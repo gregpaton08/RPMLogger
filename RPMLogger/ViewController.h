@@ -14,6 +14,7 @@
     BLE *bleShield;
     
     CPTXYGraph *graph;
+    CPTXYPlotSpace *plotSpace;
     
     NSMutableArray *RPMs;
     NSThread *logRPMthread;
@@ -25,5 +26,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelRSSI;
 @property (weak, nonatomic) IBOutlet UIButton *buttonConnect;
 @property (weak, nonatomic) IBOutlet UIButton *buttonStart;
+@property (weak, nonatomic) IBOutlet UIButton *buttonRefresh;
 
 @end

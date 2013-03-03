@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383985075.258056"
+         timestampString = "384021305.885408"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "234"
-         endingLineNumber = "234"
+         startingLineNumber = "247"
+         endingLineNumber = "247"
          landmarkName = "-startLoggingRPM:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,12 +21,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383985075.258056"
+         timestampString = "384020782.139304"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "255"
-         endingLineNumber = "255"
-         landmarkName = "-logRPM"
+         startingLineNumber = "119"
+         endingLineNumber = "119"
+         landmarkName = "-bleDidReceiveData:length:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -34,12 +34,38 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383985075.258056"
+         timestampString = "384020785.540264"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "261"
-         endingLineNumber = "261"
-         landmarkName = "-logRPM"
+         startingLineNumber = "118"
+         endingLineNumber = "118"
+         landmarkName = "-bleDidReceiveData:length:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "RPMLogger/ViewController.m"
+         timestampString = "384020788.275077"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "115"
+         endingLineNumber = "115"
+         landmarkName = "-bleDidReceiveData:length:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "RPMLogger/ViewController.m"
+         timestampString = "384023912.737847"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "314"
+         endingLineNumber = "314"
+         landmarkName = "-numberForPlot:field:recordIndex:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

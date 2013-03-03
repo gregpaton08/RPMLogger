@@ -44,13 +44,31 @@
                                     <action selector="startLoggingRPM:" destination="2" eventType="touchUpInside" id="ATv-fY-kRt"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VjA-DS-7UC"/>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VjA-DS-7UC"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1p-JF-hUD">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="73" id="Btv-0I-3d3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Refresh">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="refreshGraph:" destination="2" eventType="touchUpInside" id="3a4-5d-gyW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="y1p-JF-hUD" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Dt0-xV-hTy"/>
                             <constraint firstItem="Tuf-2x-bJ4" firstAttribute="baseline" secondItem="yxW-i8-YBT" secondAttribute="baseline" type="default" id="GOg-IQ-FdS"/>
                             <constraint firstAttribute="bottom" secondItem="VjA-DS-7UC" secondAttribute="bottom" constant="56" id="Iev-R2-gdh"/>
                             <constraint firstAttribute="trailing" secondItem="Tuf-2x-bJ4" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Ka4-Vi-iKQ"/>
+                            <constraint firstAttribute="bottom" secondItem="y1p-JF-hUD" secondAttribute="bottom" constant="89" id="jg4-A8-Nag"/>
                             <constraint firstItem="yxW-i8-YBT" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="krS-c1-3TZ"/>
                             <constraint firstItem="VjA-DS-7UC" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="p9Y-wR-bQh"/>
                             <constraint firstAttribute="bottom" secondItem="yxW-i8-YBT" secondAttribute="bottom" constant="11" id="y0O-gx-bsN"/>
@@ -58,6 +76,7 @@
                     </view>
                     <connections>
                         <outlet property="buttonConnect" destination="yxW-i8-YBT" id="sQk-hU-Hbi"/>
+                        <outlet property="buttonRefresh" destination="y1p-JF-hUD" id="2fp-5j-P2f"/>
                         <outlet property="buttonStart" destination="Tuf-2x-bJ4" id="X6d-jE-AbD"/>
                         <outlet property="spinner" destination="VjA-DS-7UC" id="p27-Im-ZCL"/>
                     </connections>
@@ -66,6 +85,26 @@
             </objects>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="BLEShieldScan:"/>
+                <relationship kind="action" name="BLEShieldSend:"/>
+                <relationship kind="action" name="startLoggingRPM:"/>
+                <relationship kind="outlet" name="buttonConnect" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonRefresh" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="buttonStart" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelRSSI" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spinner" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
