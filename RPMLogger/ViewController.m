@@ -19,11 +19,55 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    // set up Bluetooth shield
     bleShield = [[BLE alloc] init];
     [bleShield controlSetup:1];
     bleShield.delegate = (id)self;
     
+    // allocate array for RPM data
     RPMs = [[NSMutableArray alloc] init];
+    
+    
+    CGRect frame = [[self view] bounds];
+    frame.size.height = 400;
+    CPTGraphHostingView *chartView = [[CPTGraphHostingView alloc] initWithFrame: frame];
+    [[self view] addSubview:chartView];
+    
+    CPTTheme *theme = [CPTTheme themeNamed:kCPTPlainWhiteTheme];
+    graph = [theme newGraph];
+    chartView.hostedGraph = graph;
+    
+    graph.paddingLeft = 20.0;
+    graph.paddingTop = 20.0;
+    graph.paddingRight = 20.0;
+    graph.paddingBottom = 20.0;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(60)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(1500)];
+    
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph.axisSet;
+    
+    CPTXYAxis *x = axisSet.xAxis;
+    x.majorIntervalLength = CPTDecimalFromFloat(10);
+    x.minorTicksPerInterval = 2;
+    x.borderWidth = 0;
+    x.labelExclusionRanges = [NSArray arrayWithObjects:
+                              [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-100)
+                                                           length:CPTDecimalFromFloat(1100)], nil];
+    
+    CPTXYAxis *y = axisSet.yAxis;
+    y.majorIntervalLength = CPTDecimalFromFloat(10);
+    y.minorTicksPerInterval = 1;
+    y.labelExclusionRanges = [NSArray arrayWithObjects:
+                              [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-100)
+                                                           length:CPTDecimalFromFloat(6100)], nil];
+    
+    CPTScatterPlot *sp = [[CPTScatterPlot alloc] init];
+    sp.identifier = @"PLOT";
+    sp.dataSource = self;
+    sp.delegate = self;
+    [graph addPlot:sp toPlotSpace:graph.defaultPlotSpace];
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,6 +87,8 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#pragma mark - Timer
+
 // Called when scan period is over to connect to the first found peripheral
 -(void) connectionTimer:(NSTimer *)timer
 {
@@ -56,25 +102,50 @@
     }
 }
 
+#pragma mark - BLE 
+
 -(void) bleDidReceiveData:(unsigned char *)data length:(int)length
 {
-    NSData *d = [NSData dataWithBytes:data length:length];
-    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+    NSData *OBDData = [NSData dataWithBytes:data length:length];
+    NSString *OBDres = [[NSString alloc] initWithData:OBDData encoding:NSUTF8StringEncoding];
     
     // process OBD data
-    // RPM
-    if ([[s substringToIndex:4] compare:@"41 0C" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-        double rpm;
-        NSString *ret = [[s substringFromIndex:7] stringByReplacingOccurrencesOfString:@" " withString:@""];
-        NSScanner *scan = [NSScanner scannerWithString:ret];
-        [scan scanHexDouble:&rpm];
-        rpm = rpm / 4;
-        // synchronize access to RPMs array
-        @synchronized(RPMs) {
-            [RPMs addObject:[NSNumber numberWithFloat:rpm]];
+    // check mode
+    // mode $01
+    if ([OBDres length] > 2 && [[OBDres substringToIndex:2] isEqualToString:@"41"]) {
+        OBDres = [OBDres substringFromIndex:3];
+        // RPM
+        if ([OBDres length] > 7 && [[OBDres substringToIndex:2] isEqualToString:@"0C"]) {
+            OBDres = [[OBDres substringFromIndex:3] stringByReplacingOccurrencesOfString:@" " withString:@""];
+            double rpm;
+            unsigned dec;
+            NSScanner *scan = [NSScanner scannerWithString:OBDres];
+            [scan setScanLocation:0];
+            [scan scanHexInt:&dec];
+            rpm = dec / 4;
+            // synchronize access to RPMs array
+            @synchronized(RPMs) {
+                [RPMs addObject:[NSNumber numberWithFloat:rpm]];
+            }
+            [graph reloadData];
+        }
+        // Speed
+        else if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"0D"]) {
+            
+        }
+        // Mass Air Flow
+        if ([OBDres length] > 7 && [[OBDres substringToIndex:2] isEqualToString:@"10"]) {
+            
+        }
+        // Throttle Position
+        if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"11"]) {
+            
+        }
+        // Fuel Level Input
+        if ([OBDres length] > 4 && [[OBDres substringToIndex:2] isEqualToString:@"2F"]) {
+            
         }
     }
-    //self.label.text = s;
 }
 
 - (void) bleDidDisconnect
@@ -157,10 +228,9 @@
     [self.spinner startAnimating];
 }
 
+#pragma mark - IBAction
+
 - (IBAction)startLoggingRPM:(id)sender {
-    if ([_buttonConnect.titleLabel.text isEqualToString:@"Connect"])
-        return;
-    
     if ([_buttonStart.titleLabel.text isEqualToString:@"Start"]) {
         [_buttonStart setTitle:@"Stop" forState:UIControlStateNormal];
         
@@ -176,12 +246,14 @@
     }
 }
 
+#pragma mark - Threading
+
 - (void)logRPM {
     int size = 0;
     while ([logRPMthread isCancelled] == NO
            && [_buttonConnect.titleLabel.text isEqualToString:@"Disconnect"]) {
         [self BLESendCommand:@"01 0c"];
-        [NSThread sleepForTimeInterval:1];
+        [NSThread sleepForTimeInterval:0.1];
         
         // synchronize access to RPMs array
         @synchronized(RPMs) {
@@ -191,6 +263,22 @@
             }
         }
     }
+}
+
+#pragma mark - CorePlot 
+
+- (NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot {
+    int val = 0;
+    @synchronized(RPMs) {
+        val = [RPMs count];
+    }
+    return val;
+}
+
+- (NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum
+                recordIndex:(NSUInteger)index {
+    double val = [[RPMs objectAtIndex:index] doubleValue];
+    return [NSNumber numberWithDouble:val];
 }
 
 @end

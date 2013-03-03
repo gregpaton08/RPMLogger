@@ -48,11 +48,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="VjA-DS-7UC" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="142" id="42e-gv-X2t"/>
                             <constraint firstItem="Tuf-2x-bJ4" firstAttribute="baseline" secondItem="yxW-i8-YBT" secondAttribute="baseline" type="default" id="GOg-IQ-FdS"/>
+                            <constraint firstAttribute="bottom" secondItem="VjA-DS-7UC" secondAttribute="bottom" constant="56" id="Iev-R2-gdh"/>
                             <constraint firstAttribute="trailing" secondItem="Tuf-2x-bJ4" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Ka4-Vi-iKQ"/>
                             <constraint firstItem="yxW-i8-YBT" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="krS-c1-3TZ"/>
-                            <constraint firstItem="VjA-DS-7UC" firstAttribute="top" secondItem="3" secondAttribute="top" constant="171" id="kwH-ij-GRq"/>
+                            <constraint firstItem="VjA-DS-7UC" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="p9Y-wR-bQh"/>
                             <constraint firstAttribute="bottom" secondItem="yxW-i8-YBT" secondAttribute="bottom" constant="11" id="y0O-gx-bsN"/>
                         </constraints>
                     </view>

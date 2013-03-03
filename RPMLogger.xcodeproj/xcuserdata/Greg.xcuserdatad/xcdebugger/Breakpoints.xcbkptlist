@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383972611.712156"
+         timestampString = "383985075.258056"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "164"
-         endingLineNumber = "164"
+         startingLineNumber = "234"
+         endingLineNumber = "234"
          landmarkName = "-startLoggingRPM:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,24 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383972611.712156"
+         timestampString = "383985075.258056"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "66"
-         endingLineNumber = "66"
-         landmarkName = "-bleDidReceiveData:length:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "RPMLogger/ViewController.m"
-         timestampString = "383972611.712156"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "183"
-         endingLineNumber = "183"
+         startingLineNumber = "255"
+         endingLineNumber = "255"
          landmarkName = "-logRPM"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RPMLogger/ViewController.m"
-         timestampString = "383969755.896942"
+         timestampString = "383985075.258056"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "189"
-         endingLineNumber = "189"
+         startingLineNumber = "261"
+         endingLineNumber = "261"
          landmarkName = "-logRPM"
          landmarkType = "5">
       </FileBreakpoint>

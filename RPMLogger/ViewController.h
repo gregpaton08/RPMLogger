@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "BLE.h"
+#import "CorePlot-CocoaTouch.h"
 
-@interface ViewController : UIViewController {
+@interface ViewController : UIViewController <CPTBarPlotDataSource, CPTBarPlotDelegate> {
     BLE *bleShield;
+    
+    CPTXYGraph *graph;
     
     NSMutableArray *RPMs;
     NSThread *logRPMthread;
