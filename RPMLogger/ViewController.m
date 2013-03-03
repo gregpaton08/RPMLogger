@@ -22,6 +22,8 @@
     bleShield = [[BLE alloc] init];
     [bleShield controlSetup:1];
     bleShield.delegate = (id)self;
+    
+    RPMs = [[NSMutableArray alloc] init];
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,7 +60,12 @@
 {
     NSData *d = [NSData dataWithBytes:data length:length];
     NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
-    self.label.text = s;
+    
+    // synchronize access to RPMs array
+    @synchronized(RPMs) {
+        [RPMs addObject:s];
+    }
+    //self.label.text = s;
 }
 
 - (void) bleDidDisconnect
@@ -74,7 +81,7 @@
 
 -(void) bleDidUpdateRSSI:(NSNumber *)rssi
 {
-    self.labelRSSI.text = rssi.stringValue;
+    //self.labelRSSI.text = rssi.stringValue;
 }
 
 - (IBAction)BLEShieldSend:(id)sender
@@ -99,6 +106,27 @@
     [self.textField resignFirstResponder];
 }
 
+- (void)BLESendCommand:(NSString*)cmd
+{
+    NSString *s;
+    NSData *d;
+    
+    // if not connected return
+    if ([self.buttonConnect.titleLabel.text isEqualToString:@"Connect"])
+        return;
+    
+    // only send first 16 characters of command
+    if (cmd.length > 16)
+        s = [cmd substringToIndex:16];
+    else
+        s = cmd;
+    
+    s = [NSString stringWithFormat:@"%@\r\n", s];
+    d = [s dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [bleShield write:d];
+}
+
 - (IBAction)BLEShieldScan:(id)sender
 {
     int timeout = 4;
@@ -121,21 +149,38 @@
 }
 
 - (IBAction)startLoggingRPM:(id)sender {
+    if ([_buttonConnect.titleLabel.text isEqualToString:@"Connect"])
+        return;
+    
     if ([_buttonStart.titleLabel.text isEqualToString:@"Start"]) {
-        logRPMthread = [[NSThread alloc] initWithTarget:self selector:@selector(logRPM) object:nil];
         [_buttonStart setTitle:@"Stop" forState:UIControlStateNormal];
+        
+        // allocate and start thread
+        logRPMthread = [[NSThread alloc] initWithTarget:self selector:@selector(logRPM) object:nil];
         [logRPMthread start];
     }
     else {
-        [logRPMthread cancel];
         [_buttonStart setTitle:@"Start" forState:UIControlStateNormal];
+        
+        // stop thread
+        [logRPMthread cancel];
     }
 }
 
 - (void)logRPM {
-    while ([logRPMthread isCancelled] == NO) {
-        printf("THREAD\n");
+    int size = 0;
+    while ([logRPMthread isCancelled] == NO
+           && [_buttonConnect.titleLabel.text isEqualToString:@"Disconnect"]) {
+        [self BLESendCommand:@"01 0c"];
         [NSThread sleepForTimeInterval:1];
+        
+        // synchronize access to RPMs array
+        @synchronized(RPMs) {
+            while (size < [RPMs count]) {
+                printf("%s\n", [RPMs[size] UTF8String]);
+                ++size;
+            }
+        }
     }
 }
 

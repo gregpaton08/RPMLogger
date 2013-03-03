@@ -12,6 +12,7 @@
 @interface ViewController : UIViewController {
     BLE *bleShield;
     
+    NSMutableArray *RPMs;
     NSThread *logRPMthread;
 }
 
