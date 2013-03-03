@@ -30,7 +30,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tuf-2x-bJ4">
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="73" id="uSy-hs-fCz"/>
+                                    <constraint firstAttribute="width" constant="73" id="tam-q9-5LQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Start">
@@ -45,40 +45,29 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="VjA-DS-7UC"/>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1p-JF-hUD">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="73" id="Btv-0I-3d3"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Refresh">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="refreshGraph:" destination="2" eventType="touchUpInside" id="3a4-5d-gyW"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DUJ-No-HiE" customClass="CPTGraphHostingView">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="y1p-JF-hUD" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Dt0-xV-hTy"/>
-                            <constraint firstItem="Tuf-2x-bJ4" firstAttribute="baseline" secondItem="yxW-i8-YBT" secondAttribute="baseline" type="default" id="GOg-IQ-FdS"/>
-                            <constraint firstAttribute="bottom" secondItem="VjA-DS-7UC" secondAttribute="bottom" constant="56" id="Iev-R2-gdh"/>
+                            <constraint firstItem="yxW-i8-YBT" firstAttribute="baseline" secondItem="Tuf-2x-bJ4" secondAttribute="baseline" type="default" id="Evv-sJ-ziY"/>
                             <constraint firstAttribute="trailing" secondItem="Tuf-2x-bJ4" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Ka4-Vi-iKQ"/>
-                            <constraint firstAttribute="bottom" secondItem="y1p-JF-hUD" secondAttribute="bottom" constant="89" id="jg4-A8-Nag"/>
+                            <constraint firstAttribute="bottom" secondItem="DUJ-No-HiE" secondAttribute="bottom" constant="71" id="KoK-NB-8hM"/>
+                            <constraint firstItem="DUJ-No-HiE" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="R4g-eV-cpO"/>
+                            <constraint firstAttribute="bottom" secondItem="VjA-DS-7UC" secondAttribute="bottom" constant="22" id="ard-Qw-l06"/>
+                            <constraint firstAttribute="trailing" secondItem="VjA-DS-7UC" secondAttribute="trailing" constant="130" id="jLj-IP-UPa"/>
                             <constraint firstItem="yxW-i8-YBT" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="krS-c1-3TZ"/>
-                            <constraint firstItem="VjA-DS-7UC" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="p9Y-wR-bQh"/>
-                            <constraint firstAttribute="bottom" secondItem="yxW-i8-YBT" secondAttribute="bottom" constant="11" id="y0O-gx-bsN"/>
+                            <constraint firstItem="DUJ-No-HiE" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="ku8-mA-n5M"/>
+                            <constraint firstAttribute="bottom" secondItem="yxW-i8-YBT" secondAttribute="bottom" constant="11" id="nsE-lN-K5D"/>
+                            <constraint firstItem="DUJ-No-HiE" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="pkw-2S-PwG"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="buttonConnect" destination="yxW-i8-YBT" id="sQk-hU-Hbi"/>
-                        <outlet property="buttonRefresh" destination="y1p-JF-hUD" id="2fp-5j-P2f"/>
                         <outlet property="buttonStart" destination="Tuf-2x-bJ4" id="X6d-jE-AbD"/>
                         <outlet property="spinner" destination="VjA-DS-7UC" id="p27-Im-ZCL"/>
+                        <outlet property="viewCPTLHV" destination="DUJ-No-HiE" id="7yG-zd-mw5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -86,6 +75,9 @@
         </scene>
     </scenes>
     <classes>
+        <class className="CPTGraphHostingView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CPTGraphHostingView.h"/>
+        </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
@@ -94,6 +86,7 @@
             <relationships>
                 <relationship kind="action" name="BLEShieldScan:"/>
                 <relationship kind="action" name="BLEShieldSend:"/>
+                <relationship kind="action" name="refreshGraph:"/>
                 <relationship kind="action" name="startLoggingRPM:"/>
                 <relationship kind="outlet" name="buttonConnect" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="buttonRefresh" candidateClass="UIButton"/>
@@ -102,6 +95,7 @@
                 <relationship kind="outlet" name="labelRSSI" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="spinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="viewCPTLHV" candidateClass="CPTGraphHostingView"/>
             </relationships>
         </class>
     </classes>

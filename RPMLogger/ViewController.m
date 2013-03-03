@@ -27,20 +27,15 @@
     // allocate array for RPM data
     RPMs = [[NSMutableArray alloc] init];
     
-    
-    CGRect frame = [[self view] bounds];
-    frame.size.height = 400;
-    CPTGraphHostingView *chartView = [[CPTGraphHostingView alloc] initWithFrame: frame];
-    [[self view] addSubview:chartView];
-    
+    // set up graph view
     CPTTheme *theme = [CPTTheme themeNamed:kCPTPlainWhiteTheme];
     graph = [theme newGraph];
-    chartView.hostedGraph = graph;
+    _viewCPTLHV.hostedGraph = graph;
     
-    graph.paddingLeft = 20.0;
-    graph.paddingTop = 20.0;
-    graph.paddingRight = 20.0;
-    graph.paddingBottom = 20.0;
+    graph.paddingLeft = 0.0;
+    graph.paddingTop = 0.0;
+    graph.paddingRight = 0.0;
+    graph.paddingBottom = 0.0;
     
     plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0) length:CPTDecimalFromFloat(60)];
@@ -63,6 +58,7 @@
                               [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-100)
                                                            length:CPTDecimalFromFloat(6100)], nil];
     
+    // set up plot data
     CPTScatterPlot *sp = [[CPTScatterPlot alloc] init];
     sp.identifier = @"RPM";
     sp.dataSource = self;
@@ -81,6 +77,8 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
+
+#pragma mark - Rotation
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -117,6 +115,7 @@
         // RPM
         if ([OBDres length] > 7 && [[OBDres substringToIndex:2] isEqualToString:@"0C"]) {
             OBDres = [[OBDres substringFromIndex:3] stringByReplacingOccurrencesOfString:@" " withString:@""];
+            int size = 0;
             double rpm;
             unsigned dec;
             NSScanner *scan = [NSScanner scannerWithString:OBDres];
@@ -126,6 +125,13 @@
             // synchronize access to RPMs array
             @synchronized(RPMs) {
                 [RPMs addObject:[NSNumber numberWithFloat:rpm]];
+                size = [RPMs count];
+            }
+            // resize graph area to fit new data
+            if (plotSpace.xRange.lengthDouble < size) {
+                plotSpace.xRange = [CPTPlotRange
+                                    plotRangeWithLocation:CPTDecimalFromFloat(0)
+                                    length:CPTDecimalFromFloat(size)];
             }
             [graph reloadData];
         }

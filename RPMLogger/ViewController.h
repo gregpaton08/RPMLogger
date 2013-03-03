@@ -27,5 +27,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonConnect;
 @property (weak, nonatomic) IBOutlet UIButton *buttonStart;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRefresh;
+@property (weak, nonatomic) IBOutlet CPTGraphHostingView *viewCPTLHV;
 
 @end
