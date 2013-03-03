@@ -21,6 +21,7 @@
 		376FEC2616E2CA1500B0417C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FEC2516E2CA1500B0417C /* ViewController.m */; };
 		376FEC2D16E2CA3E00B0417C /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 376FEC2C16E2CA3E00B0417C /* CoreBluetooth.framework */; };
 		376FEC3216E2CA6400B0417C /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = 376FEC3016E2CA6300B0417C /* BLE.m */; };
+		376FEC3616E2F16700B0417C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 376FEC3516E2F16700B0417C /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		376FEC2F16E2CA6300B0417C /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLE.h; sourceTree = "<group>"; };
 		376FEC3016E2CA6300B0417C /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLE.m; sourceTree = "<group>"; };
 		376FEC3116E2CA6300B0417C /* BLEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDefines.h; sourceTree = "<group>"; };
+		376FEC3516E2F16700B0417C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				376FEC3616E2F16700B0417C /* QuartzCore.framework in Frameworks */,
 				376FEC2D16E2CA3E00B0417C /* CoreBluetooth.framework in Frameworks */,
 				376FEC0716E2CA1500B0417C /* UIKit.framework in Frameworks */,
 				376FEC0916E2CA1500B0417C /* Foundation.framework in Frameworks */,
@@ -82,6 +85,7 @@
 		376FEC0516E2CA1500B0417C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				376FEC3516E2F16700B0417C /* QuartzCore.framework */,
 				376FEC2E16E2CA6300B0417C /* BLE_Framework */,
 				376FEC2C16E2CA3E00B0417C /* CoreBluetooth.framework */,
 				376FEC0616E2CA1500B0417C /* UIKit.framework */,
@@ -164,6 +168,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = 376FEBFA16E2CA1500B0417C;
 			productRefGroup = 376FEC0416E2CA1500B0417C /* Products */;
@@ -296,7 +301,13 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RPMLogger/RPMLogger-Prefix.pch";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "RPMLogger/RPMLogger-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -307,7 +318,13 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RPMLogger/RPMLogger-Prefix.pch";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "RPMLogger/RPMLogger-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
